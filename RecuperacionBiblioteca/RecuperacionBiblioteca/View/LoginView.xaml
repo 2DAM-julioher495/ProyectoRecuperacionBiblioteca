@@ -1,0 +1,52 @@
+﻿<Window x:Class="RecuperacionBiblioteca.View.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RecuperacionBiblioteca.View"
+        mc:Ignorable="d"
+        Title="LoginView" Height="350" Width="250">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Background="{StaticResource primarycolor}" 
+                    Margin="0px, 5px, 0px, 5px">
+            <TextBlock Text="INICIAR SESIÓN" 
+                       HorizontalAlignment="Center" 
+                       Margin="10px"
+                       Foreground="#F2ECBE"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Margin="5px">
+            <!-- Nombre de Usuario -->
+            <TextBox Grid.Row="1"
+                     Grid.Column="1" 
+                     Text="{Binding Username}" 
+                     Margin="0 0 0 10"/>
+
+            <!-- Contraseña -->
+            <PasswordBox Grid.Row="2" 
+                         Grid.Column="1" 
+                         PasswordChanged="PB_PasswordChanged" 
+                         Margin="0 0 0 10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" 
+                    VerticalAlignment="Bottom" 
+                    Background="{StaticResource primarycolor}" 
+                    Margin="110px, 5px, 0px, 5px">
+            <Button Content="Enviar" 
+                    Margin="5px" 
+                    Padding="auto" 
+                    HorizontalAlignment="Right" 
+                    Command="{Binding LoginCommand}">
+                
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
