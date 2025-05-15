@@ -80,3 +80,4 @@ C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBibliotec
 C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\ref\RecuperacionBiblioteca.dll
 C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\res\StyleResource.baml
 C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\App.baml
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\RecuperacionBiblioteca.sourcelink.json

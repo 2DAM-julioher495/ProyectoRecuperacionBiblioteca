@@ -22,6 +22,7 @@ namespace RecuperacionBiblioteca.View
         public BibliotecaAdminView()
         {
             InitializeComponent();
+            this.DataContext = new ViewModel.BibliotecaAdminViewModel();
         }
     }
 }
