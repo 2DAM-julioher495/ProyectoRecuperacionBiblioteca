@@ -8,19 +8,7 @@
         Title="BibliotecaAdminView" Height="450" Width="800">
     <Grid>
         <StackPanel>
-            <TextBlock>Titulo:</TextBlock>
-            <TextBox  Text="{Binding Titulo}"></TextBox>
-            <TextBlock>Autor:</TextBlock>
-            <TextBox  Text="{Binding Autor}"></TextBox>
-            <TextBlock>Genero:</TextBlock>
-            <TextBox  Text="{Binding Genero}"></TextBox>
-            <TextBlock>Anio:</TextBlock>
-            <TextBox  Text="{Binding Anio}"></TextBox>
-            <TextBlock>ISBN:</TextBlock>
-            <TextBox  Text="{Binding Isbn}"></TextBox>
-            <TextBlock>Sinopsis:</TextBlock>
-            <TextBox  Text="{Binding Sinopsis}"></TextBox>
-            <Button Content="Añadir alumno" Command="{Binding AddLibroCommand}"  Margin="10"></Button>
+            <Button Content="Añadir nuevo libro" Command="{Binding GoToCreate}"  Margin="10"></Button>
 
         </StackPanel>
 

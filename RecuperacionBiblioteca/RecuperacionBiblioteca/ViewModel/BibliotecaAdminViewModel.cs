@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows;
 using Microsoft.Win32;
 using System.IO;
+using RecuperacionBiblioteca.View;
 
 namespace RecuperacionBiblioteca.ViewModel
 {
@@ -18,6 +19,8 @@ namespace RecuperacionBiblioteca.ViewModel
     {
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
+        private NuevoLibroView _ventanaCrear;
+        private bool _checkVWindow;
 
         public ObservableCollection<LibroModel> Libros
         {
@@ -32,6 +35,9 @@ namespace RecuperacionBiblioteca.ViewModel
 
         #region COMANDOS
         public RelayCommand AddLibroCommand { get; set; }
+        public RelayCommand EditLibroCommand { get; set; }
+        public RelayCommand GoToCreate {  get; set; }
+        public RelayCommand Cancel {  get; set; }
         #endregion
 
         #region PROPIEDADES NUEVO LIBRO
@@ -160,6 +166,7 @@ namespace RecuperacionBiblioteca.ViewModel
         #region CONSTRUCTOR
         public BibliotecaAdminViewModel()
         {
+            _checkVWindow = false;
             _bibliotecaService = new BibliotecaService();
             Libros = new ObservableCollection<LibroModel>();
             LoadData();
@@ -179,6 +186,21 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => NewLibro(),
                 _ => true
             );
+
+            EditLibroCommand = new RelayCommand(
+                _ => EditLibro(),
+                _ => LibroSeleccionado != null
+            );
+
+            GoToCreate = new RelayCommand(
+                _ => CreateWindow(),
+                _ => !_checkVWindow
+            );
+
+            Cancel = new RelayCommand(
+                _ => CloseWindow(),
+                _ => true
+            );
         }
 
         public void NewLibro()
@@ -186,6 +208,7 @@ namespace RecuperacionBiblioteca.ViewModel
             int idLibro = Libros.Count + 1;
             LibroModel libro = new LibroModel(idLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis, Imagen);
             _bibliotecaService.AddLibro(libro, libroImg);
+            CloseWindow();
         }
 
         private byte[] libroImg;
@@ -209,6 +232,39 @@ namespace RecuperacionBiblioteca.ViewModel
                 MessageBox.Show($"Error al cargar la imagen: {e.Message}");
             } 
         }
+
+        public void EditLibro()
+        {
+            if (LibroSeleccionado !=  null)
+            {
+                _libroSeleccionado.Titulo = Titulo;
+                _libroSeleccionado.Autor = Autor;
+                _libroSeleccionado.Genero = Genero;
+                _libroSeleccionado.Anio = Anio;
+                _libroSeleccionado.Isbn = Isbn;
+                _libroSeleccionado.Sinopsis = Sinopsis;
+                _libroSeleccionado.Imagen = Imagen;
+
+                _bibliotecaService.UpdateLibro(LibroSeleccionado, imagenSubida==false ? null : libroImg);
+            }
+        }
+
+        public void CreateWindow()
+        {
+            _ventanaCrear = new NuevoLibroView();
+
+            _ventanaCrear.Show();
+            _checkVWindow = true;
+        }
+
+        public void CloseWindow()
+        {
+           // _ventanaCrear = new NuevoLibroView();
+
+            _ventanaCrear.Close();
+            _checkVWindow = false;
+        }
+
         #endregion
 
         #region NOTIFICACION DE CAMBIOS

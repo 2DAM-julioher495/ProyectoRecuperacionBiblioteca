@@ -16,6 +16,9 @@
     <Compile Update="View\LoginView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\NuevoLibroView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="res\StyleResource.xaml">
@@ -28,6 +31,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="View\LoginView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\NuevoLibroView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

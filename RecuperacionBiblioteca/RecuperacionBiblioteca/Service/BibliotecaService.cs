@@ -108,5 +108,43 @@ namespace RecuperacionBiblioteca.Service
                 }
             }
         }
+
+        internal void UpdateLibro(LibroModel libroSeleccionado, byte[] imagenLibro)
+        {
+            using (SqlConnection conexion = new SqlConnection (connectionString))
+            {
+                conexion.Open();
+                string query = "";
+
+                if (imagenLibro != null)
+                {
+                    query = @"UPDATE Libros 
+                            SET Titulo=@titulo, Autor=@autor, Genero=@genero, Anio=@anio, ISBN=@isbn, Sinopsis=@sinopsis, Imagen=@imagen
+                            WHERE IdLibro=@idLibro";
+                } else
+                {
+                    query = @"UPDATE Libros 
+                            SET Titulo=@titulo, Autor=@autor, Genero=@genero, Anio=@anio, ISBN=@isbn, Sinopsis=@sinopsis
+                            WHERE IdLibro=@idLibro";
+                }
+
+                using (SqlCommand cmd = new SqlCommand (query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@titulo", libroSeleccionado.Titulo);
+                    cmd.Parameters.AddWithValue("@autor", libroSeleccionado.Autor);
+                    cmd.Parameters.AddWithValue("@genero", libroSeleccionado.Genero);
+                    cmd.Parameters.AddWithValue("@anio", libroSeleccionado.Anio);
+                    cmd.Parameters.AddWithValue("@isbn", libroSeleccionado.Isbn);
+                    cmd.Parameters.AddWithValue("@sinopsis", libroSeleccionado.Sinopsis);
+
+                    if (imagenLibro != null)
+                    {
+                        cmd.Parameters.AddWithValue("@imagen", libroSeleccionado.Imagen);
+                    }
+
+                    cmd.ExecuteNonQuery(); 
+                }
+            }
+        }
     }
 }
