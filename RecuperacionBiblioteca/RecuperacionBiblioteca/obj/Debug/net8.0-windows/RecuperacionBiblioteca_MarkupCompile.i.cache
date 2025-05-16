@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\
 RecuperacionBiblioteca
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\App.xaml
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\App.xaml
 591855555
 
 171201775332
-217858638494
+217-96967849
 res\StyleResource.xaml;View\BibliotecaAdminView.xaml;View\BibliotecaView.xaml;View\LoginView.xaml;View\NuevoLibroView.xaml;
 
 True

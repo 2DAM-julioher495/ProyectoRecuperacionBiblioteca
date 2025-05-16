@@ -19,7 +19,7 @@ namespace RecuperacionBiblioteca.ViewModel
     {
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
-        private NuevoLibroView _ventanaCrear;
+        private NuevoLibroView _ventanaCrear { get; set; }
         private bool _checkVWindow;
 
         public ObservableCollection<LibroModel> Libros

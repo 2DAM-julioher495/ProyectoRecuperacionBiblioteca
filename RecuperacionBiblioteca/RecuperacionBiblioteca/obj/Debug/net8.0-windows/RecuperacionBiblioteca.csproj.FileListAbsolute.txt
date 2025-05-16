@@ -166,3 +166,5 @@ C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBibliote
 C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\ref\RecuperacionBiblioteca.dll
 C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.g.cs
 C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.baml
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.g.cs
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.baml
