@@ -7,10 +7,51 @@
         mc:Ignorable="d"
         Title="BibliotecaAdminView" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <StackPanel>
             <Button Content="Añadir nuevo libro" Command="{Binding GoToCreate}"  Margin="10"></Button>
 
         </StackPanel>
+
+        <!-- DataGrid -->
+        <StackPanel Grid.Row="1">
+            <DataGrid x:Name="datagridLibros" 
+              AutoGenerateColumns="False" 
+              ItemsSource="{Binding Libros}"
+              SelectedItem="{Binding LibroSeleccionado}" 
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch"
+              ColumnWidth="*" 
+              IsReadOnly="True" 
+              CanUserAddRows="False" 
+              CanUserDeleteRows="False">
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="HorizontalContentAlignment" Value="Center" />
+                        <Setter Property="VerticalContentAlignment" Value="Center" />
+                    </Style>
+                </DataGrid.CellStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}"/>
+                    <DataGridTextColumn Header="Título" Binding="{Binding Titulo}"/>
+                    <DataGridTextColumn Header="Autor" Binding="{Binding Autor}"/>
+                    <DataGridTextColumn Header="Género" Binding="{Binding Genero}"/>
+                    <DataGridTextColumn Header="Año" Binding="{Binding Anio}"/>
+                    <DataGridTextColumn Header="ISBN" Binding="{Binding Isbn}"/>
+                    <DataGridTextColumn Header="Sinopsis" Binding="{Binding Sinopsis}"/>
+                    <DataGridTemplateColumn Header="Imagen">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding Imagen}" Width="30"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel> 
 
     </Grid>
 </Window>

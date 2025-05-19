@@ -1,27 +1,26 @@
-﻿using RecuperacionBiblioteca.Model;
+﻿using Microsoft.Win32;
+using RecuperacionBiblioteca.Model;
 using RecuperacionBiblioteca.Service;
+using RecuperacionBiblioteca.View;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows;
-using Microsoft.Win32;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 using System.IO;
-using RecuperacionBiblioteca.View;
 
 namespace RecuperacionBiblioteca.ViewModel
 {
-    public class BibliotecaAdminViewModel
+    public class NuevoLibroViewModel
     {
+        private bool _checkVWindow;
+        private NuevoLibroView _ventanaCrear;
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
-        private NuevoLibroView _ventanaCrear;
-        private bool _checkVWindow;
-
         public ObservableCollection<LibroModel> Libros
         {
             get => _libros;
@@ -32,10 +31,10 @@ namespace RecuperacionBiblioteca.ViewModel
             }
         }
 
-
         #region COMANDOS
-        public RelayCommand EditLibroCommand { get; set; }
-        public RelayCommand GoToCreate {  get; set; }
+        public RelayCommand AddLibroCommand { get; set; }
+        public RelayCommand GoToCreate { get; set; }
+        public RelayCommand Cancel { get; set; }
         #endregion
 
         #region PROPIEDADES NUEVO LIBRO
@@ -162,36 +161,35 @@ namespace RecuperacionBiblioteca.ViewModel
         #endregion
 
         #region CONSTRUCTOR
-        public BibliotecaAdminViewModel()
+        public NuevoLibroViewModel()
         {
             _checkVWindow = false;
             _bibliotecaService = new BibliotecaService();
             Libros = new ObservableCollection<LibroModel>();
-            LoadData();
             LoadCommand();
         }
         #endregion
 
-        public void LoadData()
-        {
-            Libros = _bibliotecaService.GetAllLibros();
-        }
-
-        #region FUNCIONES COMANDOS
         public void LoadCommand()
         {
-            EditLibroCommand = new RelayCommand(
-                _ => EditLibro(),
-                _ => LibroSeleccionado != null
+            AddLibroCommand = new RelayCommand(
+                _ => NewLibro(),
+                _ => true
             );
 
-            GoToCreate = new RelayCommand(
-                _ => CreateWindow(),
-                _ => !_checkVWindow
+            Cancel = new RelayCommand(
+                _ => CloseWindow(),
+                _ => true
             );
-
         }
 
+        public void NewLibro()
+        {
+            int idLibro = Libros.Count + 1;
+            LibroModel libro = new LibroModel(idLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis, Imagen);
+            _bibliotecaService.AddLibro(libro, libroImg);
+            CloseWindow();
+        }
 
         private byte[] libroImg;
         private bool imagenSubida = false;
@@ -209,37 +207,19 @@ namespace RecuperacionBiblioteca.ViewModel
                     Imagen = bitmap;
                     imagenSubida = true;
                 }
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 MessageBox.Show($"Error al cargar la imagen: {e.Message}");
-            } 
-        }
-
-        public void EditLibro()
-        {
-            if (LibroSeleccionado !=  null)
-            {
-                _libroSeleccionado.Titulo = Titulo;
-                _libroSeleccionado.Autor = Autor;
-                _libroSeleccionado.Genero = Genero;
-                _libroSeleccionado.Anio = Anio;
-                _libroSeleccionado.Isbn = Isbn;
-                _libroSeleccionado.Sinopsis = Sinopsis;
-                _libroSeleccionado.Imagen = Imagen;
-
-                _bibliotecaService.UpdateLibro(LibroSeleccionado, imagenSubida==false ? null : libroImg);
             }
         }
 
-        public void CreateWindow()
+        public void CloseWindow()
         {
-            _ventanaCrear = new NuevoLibroView();
+            _checkVWindow = false;
 
-            _ventanaCrear.Show();
-            //_checkVWindow = true;
+            _ventanaCrear.Close();
         }
-
-        #endregion
 
         #region NOTIFICACION DE CAMBIOS
         //Para las notificaciones de cambio en la vista.
