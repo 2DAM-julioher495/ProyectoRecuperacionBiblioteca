@@ -20,6 +20,8 @@ namespace RecuperacionBiblioteca.ViewModel
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
         private NuevoLibroView _ventanaCrear;
+        private BibliotecaAdminView _bibliotecaView;
+        private LoginView _loginView;
         private bool _checkVWindow;
 
         public ObservableCollection<LibroModel> Libros
@@ -36,6 +38,7 @@ namespace RecuperacionBiblioteca.ViewModel
         #region COMANDOS
         public RelayCommand EditLibroCommand { get; set; }
         public RelayCommand GoToCreate {  get; set; }
+        public RelayCommand LogoutCommand {  get; set; }
         #endregion
 
         #region PROPIEDADES NUEVO LIBRO
@@ -162,9 +165,10 @@ namespace RecuperacionBiblioteca.ViewModel
         #endregion
 
         #region CONSTRUCTOR
-        public BibliotecaAdminViewModel()
+        public BibliotecaAdminViewModel(BibliotecaAdminView biblioAdminViewThis)
         {
             _checkVWindow = false;
+            _bibliotecaView = biblioAdminViewThis;
             _bibliotecaService = new BibliotecaService();
             Libros = new ObservableCollection<LibroModel>();
             LoadData();
@@ -188,6 +192,11 @@ namespace RecuperacionBiblioteca.ViewModel
             GoToCreate = new RelayCommand(
                 _ => CreateWindow(),
                 _ => !_checkVWindow
+            );
+
+            LogoutCommand = new RelayCommand(
+                _ => Logout(),
+                _ => true
             );
 
         }
@@ -217,6 +226,7 @@ namespace RecuperacionBiblioteca.ViewModel
 
         public void EditLibro()
         {
+
             if (LibroSeleccionado !=  null)
             {
                 _libroSeleccionado.Titulo = Titulo;
@@ -233,10 +243,18 @@ namespace RecuperacionBiblioteca.ViewModel
 
         public void CreateWindow()
         {
-            _ventanaCrear = new NuevoLibroView();
+            _ventanaCrear = new NuevoLibroView(_bibliotecaService);
 
-            _ventanaCrear.Show();
+            _ventanaCrear.ShowDialog();
             //_checkVWindow = true;
+        }
+
+        public void Logout()
+        {
+            _loginView = new LoginView();
+
+            _loginView.Show();
+            _bibliotecaView.Close();
         }
 
         #endregion

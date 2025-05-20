@@ -24,12 +24,14 @@
 
         <StackPanel Grid.Row="1" Margin="5px">
             <!-- Nombre de Usuario -->
+            <TextBlock Text="Usuario"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1" 
                      Text="{Binding Username}" 
                      Margin="0 0 0 10"/>
 
             <!-- Contraseña -->
+            <TextBlock Text="Cotraseña"/>
             <PasswordBox Grid.Row="2" 
                          Grid.Column="1" 
                          PasswordChanged="PB_PasswordChanged" 

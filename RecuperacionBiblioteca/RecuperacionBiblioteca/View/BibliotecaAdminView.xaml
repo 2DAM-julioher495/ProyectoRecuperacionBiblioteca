@@ -8,11 +8,14 @@
         Title="BibliotecaAdminView" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel>
-            <Button Content="Añadir nuevo libro" Command="{Binding GoToCreate}"  Margin="10"></Button>
+        <StackPanel Orientation="Horizontal" >
+            <Button Content="Añadir nuevo libro" Command="{Binding GoToCreate}" Margin="5"></Button>
+            <Button Content="Editar libro" Command="{Binding EditLibroCommand}" Margin="5"></Button>
+            <Button Content="Eliminar libro" Command="{Binding DeleteLibroCommand}" Margin="5"></Button>
+            <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5"></Button>
 
         </StackPanel>
 

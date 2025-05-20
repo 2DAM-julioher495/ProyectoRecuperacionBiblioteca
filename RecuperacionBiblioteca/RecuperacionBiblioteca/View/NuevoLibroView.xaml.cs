@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RecuperacionBiblioteca.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,10 +20,10 @@ namespace RecuperacionBiblioteca.View
     /// </summary>
     public partial class NuevoLibroView : Window
     {
-        public NuevoLibroView()
+        public NuevoLibroView(BibliotecaService biblioService)
         {
             InitializeComponent();
-            this.DataContext = new ViewModel.NuevoLibroViewModel();
+            this.DataContext = new ViewModel.NuevoLibroViewModel(this, biblioService);
 
         }
     }

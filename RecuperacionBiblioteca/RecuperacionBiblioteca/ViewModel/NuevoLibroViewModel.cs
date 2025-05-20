@@ -161,10 +161,11 @@ namespace RecuperacionBiblioteca.ViewModel
         #endregion
 
         #region CONSTRUCTOR
-        public NuevoLibroViewModel()
+        public NuevoLibroViewModel(NuevoLibroView _ventanaCrearThis, BibliotecaService biblioService)
         {
+            _ventanaCrear = _ventanaCrearThis;
             _checkVWindow = false;
-            _bibliotecaService = new BibliotecaService();
+            _bibliotecaService = biblioService;
             Libros = new ObservableCollection<LibroModel>();
             LoadCommand();
         }
@@ -188,7 +189,7 @@ namespace RecuperacionBiblioteca.ViewModel
             int idLibro = Libros.Count + 1;
             LibroModel libro = new LibroModel(idLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis, Imagen);
             _bibliotecaService.AddLibro(libro, libroImg);
-            CloseWindow();
+            _ventanaCrear.Close();
         }
 
         private byte[] libroImg;
