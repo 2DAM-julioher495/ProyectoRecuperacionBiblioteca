@@ -109,6 +109,20 @@ namespace RecuperacionBiblioteca.Service
             }
         }
 
+        internal void DeleteLibro(LibroModel libro)
+        {
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string query = @"DELETE FROM Libros WHERE IdLibro=@idLibro";
+                using (SqlCommand cmd = new SqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idLibro", libro.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
         internal void UpdateLibro(LibroModel libroSeleccionado, byte[] imagenLibro)
         {
             using (SqlConnection conexion = new SqlConnection (connectionString))

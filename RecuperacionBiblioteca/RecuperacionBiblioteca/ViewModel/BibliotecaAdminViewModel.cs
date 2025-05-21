@@ -37,6 +37,7 @@ namespace RecuperacionBiblioteca.ViewModel
 
         #region COMANDOS
         public RelayCommand EditLibroCommand { get; set; }
+        public RelayCommand DeleteLibroCommand { get; set; }
         public RelayCommand GoToCreate {  get; set; }
         public RelayCommand LogoutCommand {  get; set; }
         #endregion
@@ -189,6 +190,11 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => LibroSeleccionado != null
             );
 
+            DeleteLibroCommand = new RelayCommand(
+                _ => DeleteLibro(),
+                _ => LibroSeleccionado != null
+            );
+
             GoToCreate = new RelayCommand(
                 _ => CreateWindow(),
                 _ => !_checkVWindow
@@ -201,31 +207,9 @@ namespace RecuperacionBiblioteca.ViewModel
 
         }
 
-
-        private byte[] libroImg;
-        private bool imagenSubida = false;
-        public void UploadImagenLibro()
-        {
-            OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Filter = "Imágenes | *.png; *.jpg; *.jpeg;";
-            try
-            {
-                if (openFile.ShowDialog() == true)
-                {
-                    string imagenSeleccionada = openFile.FileName;
-                    libroImg = File.ReadAllBytes(imagenSeleccionada);
-                    BitmapImage bitmap = new BitmapImage(new Uri(imagenSeleccionada));
-                    Imagen = bitmap;
-                    imagenSubida = true;
-                }
-            } catch (Exception e)
-            {
-                MessageBox.Show($"Error al cargar la imagen: {e.Message}");
-            } 
-        }
-
         public void EditLibro()
         {
+            //TODO: Abrir ventana de crear rellenando los campos del libro a editar.
 
             if (LibroSeleccionado !=  null)
             {
@@ -239,6 +223,18 @@ namespace RecuperacionBiblioteca.ViewModel
 
                 _bibliotecaService.UpdateLibro(LibroSeleccionado, imagenSubida==false ? null : libroImg);
             }
+        }
+
+        public void DeleteLibro()
+        {
+            var confirm = MessageBox.Show("¿Seguro que quieres eliminar el libro seleccionado?", "Confirmación", MessageBoxButton.OKCancel);
+
+            if (confirm == MessageBoxResult.OK)
+            {
+                _bibliotecaService.DeleteLibro(LibroSeleccionado);
+            }
+
+            LoadData();
         }
 
         public void CreateWindow()

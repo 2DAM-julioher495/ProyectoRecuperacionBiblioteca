@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RecuperacionBiblioteca.View"
         mc:Ignorable="d"
         WindowStyle="None"
-        Title="NuevoLibroView" Height="450" Width="800">
+        Title="NuevoLibroView" Height="350" Width="300">
     <Grid>
         <StackPanel>
             <TextBlock>Titulo:</TextBlock>
@@ -21,6 +21,9 @@
             <TextBox  Text="{Binding Isbn}"></TextBox>
             <TextBlock>Sinopsis:</TextBlock>
             <TextBox  Text="{Binding Sinopsis}"></TextBox>
+            <TextBlock Text="Subir imagen"></TextBlock>
+            <Image Source="{Binding Imagen}" Width="70"></Image>
+            <Button Content="Cargar imagen" Command="{Binding LoadImageCommand}" Margin="10"></Button>
             <Button Content="Añadir libro" Command="{Binding AddLibroCommand}"  Margin="10"></Button>
             <Button Content="Cancelar" Command="{Binding Cancel}"  Margin="10"></Button>
 

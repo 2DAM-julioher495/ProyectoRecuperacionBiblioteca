@@ -33,7 +33,7 @@ namespace RecuperacionBiblioteca.ViewModel
 
         #region COMANDOS
         public RelayCommand AddLibroCommand { get; set; }
-        public RelayCommand GoToCreate { get; set; }
+        public RelayCommand LoadImageCommand { get; set; }
         public RelayCommand Cancel { get; set; }
         #endregion
 
@@ -175,6 +175,11 @@ namespace RecuperacionBiblioteca.ViewModel
         {
             AddLibroCommand = new RelayCommand(
                 _ => NewLibro(),
+                _ => true
+            );
+
+            LoadImageCommand = new RelayCommand(
+                _ => UploadImagenLibro(),
                 _ => true
             );
 
