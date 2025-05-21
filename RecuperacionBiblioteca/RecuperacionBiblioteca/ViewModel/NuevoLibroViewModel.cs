@@ -12,6 +12,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.IO;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RecuperacionBiblioteca.ViewModel
 {
@@ -33,6 +34,7 @@ namespace RecuperacionBiblioteca.ViewModel
 
         #region COMANDOS
         public RelayCommand AddLibroCommand { get; set; }
+        public RelayCommand EditLibroCommand { get; set; }
         public RelayCommand LoadImageCommand { get; set; }
         public RelayCommand Cancel { get; set; }
         #endregion
@@ -135,17 +137,17 @@ namespace RecuperacionBiblioteca.ViewModel
 
         #region PROPIEDADES VISIBILIDAD
 
-        private Visibility _visibleAñadir = Visibility.Visible;
+        private Visibility _visibleCrear = Visibility.Visible;
 
         private Visibility _visibleEditar = Visibility.Hidden;
 
-        public Visibility VisibleAñadir
+        public Visibility VisibleCrear
         {
-            get => _visibleAñadir;
+            get => _visibleCrear;
             set
             {
-                _visibleAñadir = value;
-                OnPropertyChanged(nameof(VisibleAñadir));
+                _visibleCrear = value;
+                OnPropertyChanged(nameof(VisibleCrear));
             }
         }
         public Visibility VisibleEditar
@@ -161,12 +163,14 @@ namespace RecuperacionBiblioteca.ViewModel
         #endregion
 
         #region CONSTRUCTOR
-        public NuevoLibroViewModel(NuevoLibroView _ventanaCrearThis, BibliotecaService biblioService)
+        public NuevoLibroViewModel(NuevoLibroView _ventanaCrearThis, BibliotecaService biblioService, LibroModel libroSelectPrincipal)
         {
+            _libroSeleccionado = libroSelectPrincipal;
             _ventanaCrear = _ventanaCrearThis;
             _checkVWindow = false;
             _bibliotecaService = biblioService;
             Libros = new ObservableCollection<LibroModel>();
+            LoadLibroEdit();
             LoadCommand();
         }
         #endregion
@@ -187,6 +191,28 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => CloseWindow(),
                 _ => true
             );
+
+            EditLibroCommand = new RelayCommand(
+                _ => EditLibro(),
+                _ => LibroSeleccionado != null
+            );
+
+        }
+        public void LoadLibroEdit()
+        {
+            if (_libroSeleccionado != null)
+            {
+                Titulo = _libroSeleccionado.Titulo;
+                Autor = _libroSeleccionado.Autor;
+                Genero = _libroSeleccionado.Genero;
+                Anio = _libroSeleccionado.Anio;
+                Isbn = _libroSeleccionado.Isbn;
+                Sinopsis = _libroSeleccionado.Sinopsis;
+                Imagen = _libroSeleccionado.Imagen;
+
+                VisibleCrear = Visibility.Hidden;
+                VisibleEditar = Visibility.Visible;
+            }
         }
 
         public void NewLibro()
@@ -194,6 +220,7 @@ namespace RecuperacionBiblioteca.ViewModel
             int idLibro = Libros.Count + 1;
             LibroModel libro = new LibroModel(idLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis, Imagen);
             _bibliotecaService.AddLibro(libro, libroImg);
+            LimpiarFormulario();
             _ventanaCrear.Close();
         }
 
@@ -219,13 +246,49 @@ namespace RecuperacionBiblioteca.ViewModel
                 MessageBox.Show($"Error al cargar la imagen: {e.Message}");
             }
         }
+        private void LimpiarFormulario()
+        {
+            Titulo = null;
+            Autor = null;
+            Genero = null;
+            Anio = 0;
+            Isbn = 0;
+            Sinopsis = null;
+            Imagen = null;
+            LibroSeleccionado = null;
+
+            VisibleCrear = Visibility.Visible;
+            VisibleEditar = Visibility.Hidden;
+        }
+
+        public void EditLibro()
+        {
+
+            if (LibroSeleccionado != null)
+            {
+
+                _libroSeleccionado.Titulo = Titulo;
+                _libroSeleccionado.Autor = Autor;
+                _libroSeleccionado.Genero = Genero;
+                _libroSeleccionado.Anio = Anio;
+                _libroSeleccionado.Isbn = Isbn;
+                _libroSeleccionado.Sinopsis = Sinopsis;
+                _libroSeleccionado.Imagen = Imagen;
+
+                _bibliotecaService.UpdateLibro(LibroSeleccionado, imagenSubida == false ? null : libroImg);
+
+                LimpiarFormulario();
+                _ventanaCrear.Close();
+            }
+        }
 
         public void CloseWindow()
         {
             _checkVWindow = false;
-
+            LimpiarFormulario();
             _ventanaCrear.Close();
         }
+
 
         #region NOTIFICACION DE CAMBIOS
         //Para las notificaciones de cambio en la vista.

@@ -150,6 +150,7 @@ namespace RecuperacionBiblioteca.Service
                     cmd.Parameters.AddWithValue("@anio", libroSeleccionado.Anio);
                     cmd.Parameters.AddWithValue("@isbn", libroSeleccionado.Isbn);
                     cmd.Parameters.AddWithValue("@sinopsis", libroSeleccionado.Sinopsis);
+                    cmd.Parameters.AddWithValue("@idLibro", libroSeleccionado.Id);
 
                     if (imagenLibro != null)
                     {

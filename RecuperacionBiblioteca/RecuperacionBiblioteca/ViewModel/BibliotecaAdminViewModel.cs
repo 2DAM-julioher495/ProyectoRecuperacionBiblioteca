@@ -137,34 +137,6 @@ namespace RecuperacionBiblioteca.ViewModel
         }
         #endregion
 
-
-        #region PROPIEDADES VISIBILIDAD
-
-        private Visibility _visibleAñadir = Visibility.Visible;
-
-        private Visibility _visibleEditar = Visibility.Hidden;
-
-        public Visibility VisibleAñadir
-        {
-            get => _visibleAñadir;
-            set
-            {
-                _visibleAñadir = value;
-                OnPropertyChanged(nameof(VisibleAñadir));
-            }
-        }
-        public Visibility VisibleEditar
-        {
-            get => _visibleEditar;
-            set
-            {
-                _visibleEditar = value;
-                OnPropertyChanged(nameof(VisibleEditar));
-            }
-        }
-
-        #endregion
-
         #region CONSTRUCTOR
         public BibliotecaAdminViewModel(BibliotecaAdminView biblioAdminViewThis)
         {
@@ -186,10 +158,9 @@ namespace RecuperacionBiblioteca.ViewModel
         public void LoadCommand()
         {
             EditLibroCommand = new RelayCommand(
-                _ => EditLibro(),
+                _ => CreateWindow(),
                 _ => LibroSeleccionado != null
             );
-
             DeleteLibroCommand = new RelayCommand(
                 _ => DeleteLibro(),
                 _ => LibroSeleccionado != null
@@ -207,24 +178,6 @@ namespace RecuperacionBiblioteca.ViewModel
 
         }
 
-        public void EditLibro()
-        {
-            //TODO: Abrir ventana de crear rellenando los campos del libro a editar.
-
-            if (LibroSeleccionado !=  null)
-            {
-                _libroSeleccionado.Titulo = Titulo;
-                _libroSeleccionado.Autor = Autor;
-                _libroSeleccionado.Genero = Genero;
-                _libroSeleccionado.Anio = Anio;
-                _libroSeleccionado.Isbn = Isbn;
-                _libroSeleccionado.Sinopsis = Sinopsis;
-                _libroSeleccionado.Imagen = Imagen;
-
-                _bibliotecaService.UpdateLibro(LibroSeleccionado, imagenSubida==false ? null : libroImg);
-            }
-        }
-
         public void DeleteLibro()
         {
             var confirm = MessageBox.Show("¿Seguro que quieres eliminar el libro seleccionado?", "Confirmación", MessageBoxButton.OKCancel);
@@ -239,10 +192,11 @@ namespace RecuperacionBiblioteca.ViewModel
 
         public void CreateWindow()
         {
-            _ventanaCrear = new NuevoLibroView(_bibliotecaService);
+            _ventanaCrear = new NuevoLibroView(_bibliotecaService, LibroSeleccionado);
 
             _ventanaCrear.ShowDialog();
-            //_checkVWindow = true;
+
+            LoadData();
         }
 
         public void Logout()

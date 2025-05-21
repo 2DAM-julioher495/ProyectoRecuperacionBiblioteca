@@ -5,7 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RecuperacionBiblioteca.View"
         mc:Ignorable="d"
+        Background="{StaticResource background}"
         Title="LoginView" Height="350" Width="250">
+
+    <Window.Resources>
+        <Style x:Key="StyleButton" TargetType="Button">
+            <Setter Property="ItemsControl.Background" Value="{StaticResource primarycolor}"/>
+            <Setter Property="ItemsControl.Foreground" Value="{StaticResource fontWhite}"/>
+            <Setter Property="ItemsControl.FontSize" Value="15"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,7 +29,7 @@
             <TextBlock Text="INICIAR SESIÓN" 
                        HorizontalAlignment="Center" 
                        Margin="10px"
-                       Foreground="#F2ECBE"/>
+                       Foreground="{StaticResource fontWhite}"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1" Margin="5px">
@@ -39,13 +49,12 @@
         </StackPanel>
 
         <StackPanel Grid.Row="3" 
-                    VerticalAlignment="Bottom" 
-                    Background="{StaticResource primarycolor}" 
-                    Margin="110px, 5px, 0px, 5px">
+                    VerticalAlignment="Bottom">
             <Button Content="Enviar" 
-                    Margin="5px" 
-                    Padding="auto" 
+                    Margin="5, 5, 0,  5" 
+                    Padding="50, 10" 
                     HorizontalAlignment="Right" 
+                    Style="{StaticResource StyleButton}"
                     Command="{Binding LoginCommand}">
                 
             </Button>

@@ -11,7 +11,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Width="Auto">
+        <StackPanel Orientation="Horizontal" Width="Auto" Background="{StaticResource primarycolor}">
             <Button Content="Añadir nuevo libro" Command="{Binding GoToCreate}" Margin="5"></Button>
             <Button Content="Editar libro" Command="{Binding EditLibroCommand}" Margin="5"></Button>
             <Button Content="Eliminar libro" Command="{Binding DeleteLibroCommand}" Margin="5"></Button>
@@ -35,6 +35,7 @@
                     <Style TargetType="DataGridCell">
                         <Setter Property="HorizontalContentAlignment" Value="Center" />
                         <Setter Property="VerticalContentAlignment" Value="Center" />
+                        <Setter Property="ItemsControl.Background" Value="{StaticResource background}"/>
                     </Style>
                 </DataGrid.CellStyle>
                 <DataGrid.Columns>
@@ -55,6 +56,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel> 
-
     </Grid>
 </Window>

@@ -3,5 +3,8 @@
 
     <SolidColorBrush x:Key="primarycolor" Color="#9A3B3B"></SolidColorBrush>
     <SolidColorBrush x:Key="secondarycolor" Color="#000000"></SolidColorBrush>
+    <SolidColorBrush x:Key="background" Color="#F2ECBE"></SolidColorBrush>
+    <SolidColorBrush x:Key="fontWhite" Color="White"></SolidColorBrush>
+    <FontFamily x:Key="fontstyle"></FontFamily>
     
 </ResourceDictionary>

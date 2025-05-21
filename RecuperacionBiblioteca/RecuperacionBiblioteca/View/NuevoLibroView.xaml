@@ -8,7 +8,15 @@
         WindowStyle="None"
         Title="NuevoLibroView" Height="350" Width="300">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Margin="10,10,3,10" Grid.ColumnSpan="2">
             <TextBlock>Titulo:</TextBlock>
             <TextBox  Text="{Binding Titulo}"></TextBox>
             <TextBlock>Autor:</TextBlock>
@@ -21,13 +29,17 @@
             <TextBox  Text="{Binding Isbn}"></TextBox>
             <TextBlock>Sinopsis:</TextBlock>
             <TextBox  Text="{Binding Sinopsis}"></TextBox>
-            <TextBlock Text="Subir imagen"></TextBlock>
+
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 0, 5, 10">
+            <!--Campo que mostrará la imagen si se sube.-->
             <Image Source="{Binding Imagen}" Width="70"></Image>
-            <Button Content="Cargar imagen" Command="{Binding LoadImageCommand}" Margin="10"></Button>
-            <Button Content="Añadir libro" Command="{Binding AddLibroCommand}"  Margin="10"></Button>
-            <Button Content="Cancelar" Command="{Binding Cancel}"  Margin="10"></Button>
-
-
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Button Content="Cargar imagen" Command="{Binding LoadImageCommand}" Margin="2"></Button>
+            <Button Content="Añadir libro" Command="{Binding AddLibroCommand}" Visibility="{Binding VisibleCrear}" Margin="2"></Button>
+            <Button Content="Guardar cambios" Command="{Binding EditLibroCommand}" Visibility="{Binding VisibleEditar}" Margin="2"></Button>
+            <Button Content="Cancelar" Command="{Binding Cancel}" Margin="2"></Button>
         </StackPanel>
     </Grid>
 </Window>
