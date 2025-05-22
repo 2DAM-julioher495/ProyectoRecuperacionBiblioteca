@@ -15,7 +15,7 @@ using RecuperacionBiblioteca.View;
 
 namespace RecuperacionBiblioteca.ViewModel
 {
-    public class BibliotecaAdminViewModel
+    public class BibliotecaAdminViewModel : INotifyPropertyChanged
     {
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
@@ -40,6 +40,7 @@ namespace RecuperacionBiblioteca.ViewModel
         public RelayCommand DeleteLibroCommand { get; set; }
         public RelayCommand GoToCreate {  get; set; }
         public RelayCommand LogoutCommand {  get; set; }
+        public RelayCommand ReportCommand { get; set; }
         #endregion
 
         #region PROPIEDADES NUEVO LIBRO
@@ -176,6 +177,10 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => true
             );
 
+            ReportCommand = new RelayCommand(
+                _ => DownloadAllLibros(),
+                _ => true
+            );
         }
 
         public void DeleteLibro()
@@ -185,9 +190,8 @@ namespace RecuperacionBiblioteca.ViewModel
             if (confirm == MessageBoxResult.OK)
             {
                 _bibliotecaService.DeleteLibro(LibroSeleccionado);
+                LoadData();
             }
-
-            LoadData();
         }
 
         public void CreateWindow()
@@ -205,6 +209,11 @@ namespace RecuperacionBiblioteca.ViewModel
 
             _loginView.Show();
             _bibliotecaView.Close();
+        }
+
+        public void DownloadAllLibros()
+        {
+            _bibliotecaService.ExportAllLibros();
         }
 
         #endregion

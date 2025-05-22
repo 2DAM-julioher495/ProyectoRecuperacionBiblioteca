@@ -16,7 +16,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace RecuperacionBiblioteca.ViewModel
 {
-    public class NuevoLibroViewModel
+    public class NuevoLibroViewModel : INotifyPropertyChanged
     {
         private bool _checkVWindow;
         private NuevoLibroView _ventanaCrear;
@@ -179,12 +179,7 @@ namespace RecuperacionBiblioteca.ViewModel
         {
             AddLibroCommand = new RelayCommand(
                 _ => NewLibro(),
-                _ => true
-            );
-
-            LoadImageCommand = new RelayCommand(
-                _ => UploadImagenLibro(),
-                _ => true
+                _ => true //TODO: poder activar solo cuando no esté ninguna opción marcada
             );
 
             Cancel = new RelayCommand(
@@ -197,6 +192,12 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => LibroSeleccionado != null
             );
 
+            LoadImageCommand = new RelayCommand(
+                _ => UploadImagenLibro(),
+                _ => true
+            );
+
+            //TODO: botón para cancelar selección.
         }
         public void LoadLibroEdit()
         {
@@ -217,6 +218,7 @@ namespace RecuperacionBiblioteca.ViewModel
 
         public void NewLibro()
         {
+            // TODO: validar que los campos son introducidos adecuadamente.
             int idLibro = Libros.Count + 1;
             LibroModel libro = new LibroModel(idLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis, Imagen);
             _bibliotecaService.AddLibro(libro, libroImg);

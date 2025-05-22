@@ -16,6 +16,7 @@
             <Button Content="Editar libro" Command="{Binding EditLibroCommand}" Margin="5"></Button>
             <Button Content="Eliminar libro" Command="{Binding DeleteLibroCommand}" Margin="5"></Button>
             <Button Content="Logout" Command="{Binding LogoutCommand}" Margin="5"></Button>
+            <Button Content="Descargar todo" Command="{Binding ReportCommand}" Margin="5"></Button>
 
         </StackPanel>
 

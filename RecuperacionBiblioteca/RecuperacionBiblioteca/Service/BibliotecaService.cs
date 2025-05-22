@@ -45,26 +45,23 @@ namespace RecuperacionBiblioteca.Service
                             string sinopsis = reader["Sinopsis"].ToString();
                             BitmapImage imagenLibro = null;
 
+                            if (!string.IsNullOrEmpty(reader["Imagen"].ToString()))
+                            {
+                                byte[] imagenBytes = (byte[])reader["Imagen"];
+                                BitmapImage bitmap = new BitmapImage();
+                                using (MemoryStream ms = new MemoryStream(imagenBytes))
+                                {
+                                    bitmap.BeginInit();
+                                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmap.StreamSource = ms;
+                                    bitmap.EndInit();
+                                }
+
+                                imagenLibro = bitmap;
+
+                            }
                             libro = new LibroModel(libroId, titulo, autor, genero, anio, isbn, sinopsis, imagenLibro);
-
                             _listaLibros.Add(libro);
-
-                            //if (!string.IsNullOrEmpty(reader["Imagen"].ToString()))
-                            //{
-                            //    byte[] imagenBytes = (byte[])reader["Imagen"];
-                            //    BitmapImage bitmap = new BitmapImage();
-                            //    using (MemoryStream ms = new MemoryStream(imagenBytes))
-                            //    {
-                            //        bitmap.BeginInit();
-                            //        bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                            //        bitmap.StreamSource = ms;
-                            //        bitmap.EndInit();
-                            //    }
-
-                            //    imagenLibro = bitmap;
-
-
-                            //}
                         }
                     }
                 }
@@ -101,7 +98,7 @@ namespace RecuperacionBiblioteca.Service
 
                     if (libroImg != null)
                     {
-                        cmd.Parameters.AddWithValue("@imagen", libro.Imagen);
+                        cmd.Parameters.AddWithValue("@imagen", libroImg);
                     }
 
                     cmd.ExecuteNonQuery();
@@ -121,6 +118,11 @@ namespace RecuperacionBiblioteca.Service
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        internal void ExportAllLibros()
+        {
+            
         }
 
         internal void UpdateLibro(LibroModel libroSeleccionado, byte[] imagenLibro)
@@ -154,7 +156,7 @@ namespace RecuperacionBiblioteca.Service
 
                     if (imagenLibro != null)
                     {
-                        cmd.Parameters.AddWithValue("@imagen", libroSeleccionado.Imagen);
+                        cmd.Parameters.AddWithValue("@imagen", imagenLibro);
                     }
 
                     cmd.ExecuteNonQuery(); 

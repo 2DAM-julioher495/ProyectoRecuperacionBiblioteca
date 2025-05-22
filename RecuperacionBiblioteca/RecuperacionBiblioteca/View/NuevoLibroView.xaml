@@ -33,7 +33,7 @@
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="0" Margin="10, 0, 5, 10">
             <!--Campo que mostrará la imagen si se sube.-->
-            <Image Source="{Binding Imagen}" Width="70"></Image>
+            <Image Source="{Binding Imagen}"></Image>
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="1">
             <Button Content="Cargar imagen" Command="{Binding LoadImageCommand}" Margin="2"></Button>
