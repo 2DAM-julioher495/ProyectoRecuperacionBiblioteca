@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RecuperacionBiblioteca.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,11 +17,16 @@ namespace RecuperacionBiblioteca.View
 {
     public partial class BibliotecaView : Window
     {
-        public BibliotecaView()
+        public BibliotecaView(UsuarioModel usuario)
         {
             InitializeComponent();
 
-            this.DataContext = new ViewModel.BibliotecaViewModel();
+            this.DataContext = new ViewModel.BibliotecaViewModel(this, usuario);
+        }
+
+        private void CheckBox_IsHitTestVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+
         }
     }
 }

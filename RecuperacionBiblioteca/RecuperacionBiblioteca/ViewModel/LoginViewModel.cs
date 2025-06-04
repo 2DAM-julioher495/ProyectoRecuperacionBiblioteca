@@ -72,7 +72,7 @@ namespace RecuperacionBiblioteca.ViewModel
             UsuarioModel usuarioLogin = _loginService.GetUsuarioLogin(Username, Password);
             if (usuarioLogin != null && usuarioLogin.Rol.Equals("usuario"))
             {
-                BibliotecaView bibliotecaView = new BibliotecaView();
+                BibliotecaView bibliotecaView = new BibliotecaView(usuarioLogin);
                 bibliotecaView.Show();
                 _windowLogin.Close();
             } 

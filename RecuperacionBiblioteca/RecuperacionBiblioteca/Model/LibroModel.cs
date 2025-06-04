@@ -18,6 +18,7 @@ namespace RecuperacionBiblioteca.Model
         private long _isbn;
         private string _sinopsis;
         private BitmapImage _imagen;
+        private bool _isFav;
 
         public int Id 
         { 
@@ -93,7 +94,13 @@ namespace RecuperacionBiblioteca.Model
             }
         }
 
-        public LibroModel(int id, string titulo, string autor, string genero, int anio, long isbn, string sinopsis, BitmapImage imagen)
+        public bool IsFav 
+        { 
+            get => _isFav; 
+            set => _isFav = value; 
+        }
+
+        public LibroModel(int id, string titulo, string autor, string genero, int anio, long isbn, string sinopsis, BitmapImage imagen, bool isFav = false)
         {
             _id = id;
             _titulo = titulo;
@@ -103,6 +110,7 @@ namespace RecuperacionBiblioteca.Model
             _isbn = isbn;
             _sinopsis = sinopsis;
             Imagen = imagen;
+            _isFav = isFav;
         }
 
         #region NOTIFICACION DE CAMBIOS

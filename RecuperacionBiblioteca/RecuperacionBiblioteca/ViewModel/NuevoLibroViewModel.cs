@@ -179,7 +179,7 @@ namespace RecuperacionBiblioteca.ViewModel
         {
             AddLibroCommand = new RelayCommand(
                 _ => NewLibro(),
-                _ => true //TODO: poder activar solo cuando no esté ninguna opción marcada
+                _ => CheckSeleccionado() && LibroSeleccionado == null //TODO
             );
 
             Cancel = new RelayCommand(
@@ -289,6 +289,19 @@ namespace RecuperacionBiblioteca.ViewModel
             _checkVWindow = false;
             LimpiarFormulario();
             _ventanaCrear.Close();
+        }
+
+        public bool CheckSeleccionado()
+        {
+            bool check = false;
+
+            if (!string.IsNullOrEmpty(Titulo) && !string.IsNullOrEmpty(Autor) && !string.IsNullOrEmpty(Genero) &&
+                Anio != 0 && Isbn != 0 && !string.IsNullOrEmpty(Sinopsis))
+            {
+                check = true;
+            }
+
+            return check;
         }
 
 

@@ -12,6 +12,18 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
+        <StackPanel Grid.Row="0">
+            <Button Content="Ver favoritos" Command="{Binding ShowFavCommand}" Margin="5"/>
+            <Button Content="Añadir a favoritos" Command="{Binding AddFavCommand}" Margin="5"/>
+            <Button Content="Quitar de favoritos" Command="{Binding DeleteFavCommand}" Margin="5"/>
+            <Button Content="Descargar todos los libros" Command="{Binding ReportAllCommand}" Margin="5"/>
+            <Button Content="Descargar Favoritos" Command="{Binding ReportFavCommand}" Margin="5"/>
+            <TextBox Margin="5, 5, 5,  0"/>
+            <TextBlock Margin="5, 0, 5, 5">Buscar por Título, Autor o género.</TextBlock>
+            <Button Content="Buscar" Command="{Binding FindCommand}" Margin="5"/>
+            <Button Content="Cancelar Selección" Command="{Binding UnselectCommand}" Margin="5"/>
+        </StackPanel>
+
         <!-- DataGrid -->
         <StackPanel Grid.Column="1">
             <DataGrid x:Name="datagridLibros" 
@@ -20,7 +32,7 @@
                       SelectedItem="{Binding LibroSeleccionado}" 
                       HorizontalAlignment="Stretch" 
                       VerticalAlignment="Stretch"
-                      ColumnWidth="*" 
+                      ColumnWidth="*"
                       IsReadOnly="True" 
                       CanUserAddRows="False" 
                       CanUserDeleteRows="False">
@@ -42,6 +54,13 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Image Source="{Binding Imagen}" Width="30"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Fav">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsFav}" IsEnabled="False"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

@@ -9,6 +9,12 @@ using RecuperacionBiblioteca.Model;
 using Microsoft.Data.SqlClient;
 using System.Windows.Media.Imaging;
 using System.IO;
+using Microsoft.Win32;
+using System.Web;
+using System.Data;
+using ClosedXML.Excel;
+using System.Windows;
+using System.Globalization;
 
 
 
@@ -19,6 +25,8 @@ namespace RecuperacionBiblioteca.Service
         //Conexión a la BD.
         private string connectionString = ConfigurationManager.ConnectionStrings["Conexion_App"].ConnectionString;
         private ObservableCollection<LibroModel> _listaLibros {  get; set; }
+        private ObservableCollection<LibroModel> _listaLibrosAndFav {  get; set; }
+        private ObservableCollection<LibroModel> _listaFav {  get; set; }
 
         public ObservableCollection<LibroModel> GetAllLibros()
         {
@@ -70,7 +78,7 @@ namespace RecuperacionBiblioteca.Service
             return _listaLibros;
         }
 
-        internal void AddLibro(LibroModel libro, byte[] libroImg)
+        public void AddLibro(LibroModel libro, byte[] libroImg)
         {
             using (SqlConnection conexion = new SqlConnection(connectionString))
             {
@@ -106,7 +114,7 @@ namespace RecuperacionBiblioteca.Service
             }
         }
 
-        internal void DeleteLibro(LibroModel libro)
+        public void DeleteLibro(LibroModel libro)
         {
             using (SqlConnection conexion = new SqlConnection(connectionString))
             {
@@ -120,12 +128,106 @@ namespace RecuperacionBiblioteca.Service
             }
         }
 
-        internal void ExportAllLibros()
+        public void ExportAllLibros()
         {
-            
+            SaveFileDialog savefiledialog = new SaveFileDialog();
+            savefiledialog.Title = "Guardar reporte";
+            savefiledialog.Filter = "Archivos Excel (*.xlsx)|*.xlsx";
+            savefiledialog.FileName = "Reporte_libros.xlsx";
+
+            if (savefiledialog.ShowDialog() == true)
+            {
+                string ruta = savefiledialog.FileName;
+
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = @"SELECT IdLibro, Titulo, Autor, Genero, Anio, Isbn, Sinopsis FROM Libros";
+                    
+                    using (SqlCommand cmd = new SqlCommand(query, conexion))
+                    {
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            using (XLWorkbook wb = new XLWorkbook())
+                            {
+                                var hoja = wb.Worksheets.Add(dt, "Libros");
+                                hoja.Columns().AdjustToContents();
+                                hoja.Row(1).Style.Font.Bold = true;
+                                var lastColumn = hoja.LastColumnUsed().ColumnNumber();
+                                var lastRow = hoja.LastRowUsed().RowNumber();
+                                hoja.Range(1, 1, 1, lastColumn).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                hoja.Range(2, 1, lastRow, lastColumn).Style.Fill.SetBackgroundColor(XLColor.WhiteSmoke);
+                                wb.SaveAs(ruta);
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show($"Report guardado en: \n{ruta}", "Generación correcta.", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
-        internal void UpdateLibro(LibroModel libroSeleccionado, byte[] imagenLibro)
+        public ObservableCollection<LibroModel> GetAllLibrosAndFav(UsuarioModel usuario)
+        {
+            _listaLibrosAndFav = new ObservableCollection<LibroModel>();
+            LibroModel libro = null;
+
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string query = @"SELECT l.IdLibro, l.Titulo, l.Autor, l.Genero, l.Anio, l.ISBN, l.Sinopsis, l.Imagen,
+                                CASE WHEN f.Id IS NOT NULL THEN 1 ELSE 0
+                                END AS EsFavorito, f.FechaGuardado
+                                FROM Libros l LEFT JOIN Favoritos f ON l.IdLibro = f.IdLibro AND f.IdUsuario=@IdUsuario
+                                ORDER BY l.Titulo";
+
+                using (SqlCommand cmd = new SqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@IdUsuario", usuario.Id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int libroId = Convert.ToInt32(reader["IdLibro"]);
+                            string titulo = reader["Titulo"].ToString();
+                            string autor = reader["Autor"].ToString();
+                            string genero = reader["genero"].ToString();
+                            int anio = Convert.ToInt32(reader["Anio"]);
+                            long isbn = Convert.ToInt64(reader["ISBN"]);
+                            string sinopsis = reader["Sinopsis"].ToString();
+                            BitmapImage imagenLibro = null;
+
+                            if (!string.IsNullOrEmpty(reader["Imagen"].ToString()))
+                            {
+                                byte[] imagenBytes = (byte[])reader["Imagen"];
+                                BitmapImage bitmap = new BitmapImage();
+                                using (MemoryStream ms = new MemoryStream(imagenBytes))
+                                {
+                                    bitmap.BeginInit();
+                                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmap.StreamSource = ms;
+                                    bitmap.EndInit();
+                                }
+                                imagenLibro = bitmap;
+                            }
+                            bool isFav = false;
+                            int favorito = Convert.ToInt32(reader["EsFavorito"]);
+                            if (favorito == 1)
+                            {
+                                isFav = true;
+                            }
+                            libro = new LibroModel(libroId, titulo, autor, genero, anio, isbn, sinopsis, imagenLibro, isFav);
+                            _listaLibrosAndFav.Add(libro);
+                        }
+                    }
+                }
+            }
+            return _listaLibrosAndFav;
+        }
+
+        public void UpdateLibro(LibroModel libroSeleccionado, byte[] imagenLibro)
         {
             using (SqlConnection conexion = new SqlConnection (connectionString))
             {
@@ -162,6 +264,139 @@ namespace RecuperacionBiblioteca.Service
                     cmd.ExecuteNonQuery(); 
                 }
             }
+        }
+
+        internal void AddFav(LibroModel libro, UsuarioModel usuario)
+        {
+            DateTime horaActual = DateTime.UtcNow;
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string query = "INSERT INTO Favoritos (IdUsuario, IdLibro, FechaGuardado) VALUES (@idUsuario, @idLibro, @fecha)";
+                
+                using (SqlCommand cmd = new SqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", usuario.Id);
+                    cmd.Parameters.AddWithValue("@idLibro", libro.Id);
+                    cmd.Parameters.AddWithValue("@fecha", horaActual);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        internal void DeleteFav(LibroModel libroSeleccionado, UsuarioModel usuario)
+        {
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string query = "DELETE FROM Favoritos WHERE IdLibro=@idLibro AND IdUsuario=@idUsuario";
+
+                using (SqlCommand cmd = new SqlCommand(query, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idLibro", libroSeleccionado.Id);
+                    cmd.Parameters.AddWithValue("@idUsuario", usuario.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        internal void ExportFav(UsuarioModel usuario)
+        {
+            SaveFileDialog savefiledialog = new SaveFileDialog();
+            savefiledialog.Title = "Guardar reporte";
+            savefiledialog.Filter = "Archivos Excel (*.xlsx)|*.xlsx";
+            savefiledialog.FileName = "Reporte_.Favoritosxlsx";
+
+            if (savefiledialog.ShowDialog() == true)
+            {
+                string ruta = savefiledialog.FileName;
+
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = @"SELECT l.IdLibro, l.Titulo, l.Autor, l.Genero, l.Anio, l.Isbn, l.Sinopsis FROM Libros l 
+                                    JOIN Favoritos f ON l.IdLibro = f.IdLibro
+                                    WHERE f.IdUsuario=@idUsuario";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conexion))
+                    {
+                        cmd.Parameters.AddWithValue("@idUsuario", usuario.Id);
+                        using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+
+                            using (XLWorkbook wb = new XLWorkbook())
+                            {
+                                var hoja = wb.Worksheets.Add(dt, "Libros");
+                                hoja.Columns().AdjustToContents();
+                                hoja.Row(1).Style.Font.Bold = true;
+                                var lastColumn = hoja.LastColumnUsed().ColumnNumber();
+                                var lastRow = hoja.LastRowUsed().RowNumber();
+                                hoja.Range(1, 1, 1, lastColumn).Style.Fill.SetBackgroundColor(XLColor.BabyBlue);
+                                hoja.Range(2, 1, lastRow, lastColumn).Style.Fill.SetBackgroundColor(XLColor.WhiteSmoke);
+                                wb.SaveAs(ruta);
+                            }
+                        }
+                    }
+                }
+                MessageBox.Show($"Report guardado en: \n{ruta}", "Generación correcta.", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        internal ObservableCollection<LibroModel> ShowFav(UsuarioModel usuario)
+        {
+            _listaFav = new ObservableCollection<LibroModel>();
+            LibroModel libro = null;
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string sql = @"SELECT l.IdLibro, l.Titulo, l.Autor,l.Genero , l.Anio, l.ISBN, l.Sinopsis, l.Imagen, 
+                                CASE WHEN f.Id IS NOT NULL THEN 1 ELSE 0 END AS EsFavorito
+                                FROM Libros l JOIN Favoritos f ON l.IdLibro = f.IdLibro
+                                WHERE f.IdUsuario = @idUsuario";
+                using (SqlCommand cmd = new SqlCommand(sql, conexion))
+                {
+                    cmd.Parameters.AddWithValue("@idUsuario", usuario.Id);
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int libroId = Convert.ToInt32(reader["IdLibro"]);
+                            string titulo = reader["Titulo"].ToString();
+                            string autor = reader["Autor"].ToString();
+                            string genero = reader["genero"].ToString();
+                            int anio = Convert.ToInt32(reader["Anio"]);
+                            long isbn = Convert.ToInt64(reader["ISBN"]);
+                            string sinopsis = reader["Sinopsis"].ToString();
+                            BitmapImage imagenLibro = null;
+
+                            if (!string.IsNullOrEmpty(reader["Imagen"].ToString()))
+                            {
+                                byte[] imagenBytes = (byte[])reader["Imagen"];
+                                BitmapImage bitmap = new BitmapImage();
+                                using (MemoryStream ms = new MemoryStream(imagenBytes))
+                                {
+                                    bitmap.BeginInit();
+                                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                                    bitmap.StreamSource = ms;
+                                    bitmap.EndInit();
+                                }
+                                imagenLibro = bitmap;
+                            }
+                            bool isFav = false;
+                            int favorito = Convert.ToInt32(reader["EsFavorito"]);
+                            if (favorito == 1)
+                            {
+                                isFav = true;
+                            }
+                            libro = new LibroModel(libroId, titulo, autor, genero, anio, isbn, sinopsis, imagenLibro, isFav);
+                            _listaFav.Add(libro);
+                        }
+                    }
+                }
+            }
+            return _listaFav;
         }
     }
 }

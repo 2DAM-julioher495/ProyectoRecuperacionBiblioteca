@@ -168,3 +168,11 @@ C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBibliote
 C:\Users\2DAM-julioher495\source\repos\net-projects\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.baml
 C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.g.cs
 C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\obj\Debug\net8.0-windows\View\NuevoLibroView.baml
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\ClosedXML.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\ClosedXML.Parser.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\DocumentFormat.OpenXml.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\DocumentFormat.OpenXml.Framework.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\ExcelNumberFormat.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\RBush.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\SixLabors.Fonts.dll
+C:\Users\alber\source\repos\ProyectoRecuperacionBiblioteca\RecuperacionBiblioteca\RecuperacionBiblioteca\bin\Debug\net8.0-windows\System.IO.Packaging.dll
