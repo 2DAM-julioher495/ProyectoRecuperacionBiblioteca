@@ -18,7 +18,7 @@
             <Button Content="Quitar de favoritos" Command="{Binding DeleteFavCommand}" Margin="5"/>
             <Button Content="Descargar todos los libros" Command="{Binding ReportAllCommand}" Margin="5"/>
             <Button Content="Descargar Favoritos" Command="{Binding ReportFavCommand}" Margin="5"/>
-            <TextBox Margin="5, 5, 5,  0"/>
+            <TextBox Margin="5, 5, 5,  0" Text="{Binding TextBox}"/>
             <TextBlock Margin="5, 0, 5, 5">Buscar por Título, Autor o género.</TextBlock>
             <Button Content="Buscar" Command="{Binding FindCommand}" Margin="5"/>
             <Button Content="Cancelar Selección" Command="{Binding UnselectCommand}" Margin="5"/>

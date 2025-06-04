@@ -28,7 +28,7 @@ namespace RecuperacionBiblioteca.Service
         private ObservableCollection<LibroModel> _listaLibrosAndFav {  get; set; }
         private ObservableCollection<LibroModel> _listaFav {  get; set; }
 
-        public ObservableCollection<LibroModel> GetAllLibros()
+        public ObservableCollection<LibroModel> GetAllLibros(String TextBox=null)
         {
             _listaLibros = new ObservableCollection<LibroModel>();
             LibroModel libro = null;
@@ -36,10 +36,24 @@ namespace RecuperacionBiblioteca.Service
             using (SqlConnection conexion = new SqlConnection(connectionString))
             {
                 conexion.Open();
-                string query = @"SELECT IdLibro, Titulo, Autor, Genero, Anio, ISBN, Sinopsis, Imagen FROM Libros";
+                string query = "";
+                if (TextBox == null)
+                {
+                    query = @"SELECT IdLibro, Titulo, Autor, Genero, Anio, ISBN, Sinopsis, Imagen FROM Libros";
+                } else
+                {
+                    query = @"SELECT IdLibro, Titulo, Autor, Genero, Anio, ISBN, Sinopsis, Imagen FROM Libros
+                                WHERE Titulo LIKE @findTitulo OR Autor LIKE @findAutor OR Genero LIKE @findGenero";
+                }
 
                 using (SqlCommand cmd = new SqlCommand(query, conexion))
                 {
+                    if (TextBox != null)
+                    {
+                        cmd.Parameters.AddWithValue("@findTitulo", TextBox);
+                        cmd.Parameters.AddWithValue("@findAutor", TextBox);
+                        cmd.Parameters.AddWithValue("@findGenero", TextBox);
+                    }
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -397,6 +411,15 @@ namespace RecuperacionBiblioteca.Service
                 }
             }
             return _listaFav;
+        }
+
+        internal void FindLibro(LibroModel libroSeleccionado, UsuarioModel usuario)
+        {
+            using (SqlConnection conexion = new SqlConnection(connectionString))
+            {
+                conexion.Open();
+                string sql = "SELECT ";
+            }
         }
     }
 }

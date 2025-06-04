@@ -19,6 +19,7 @@ namespace RecuperacionBiblioteca.ViewModel
         private readonly BibliotecaService _bibliotecaService;
         private ObservableCollection<LibroModel> _libros;
         private UsuarioModel _usuario;
+        private String _textBox;
 
         public ObservableCollection<LibroModel> Libros 
         { 
@@ -30,6 +31,16 @@ namespace RecuperacionBiblioteca.ViewModel
             }
         }
 
+        public string TextBox 
+        { 
+            get => _textBox; 
+            set
+            {
+                _textBox = value;
+                OnPropertyChanged(nameof(TextBox));
+            } 
+        }
+
 
         #region COMANDOS
         public RelayCommand ShowFavCommand {  get; set; }
@@ -38,6 +49,7 @@ namespace RecuperacionBiblioteca.ViewModel
         public RelayCommand ReportAllCommand {  get; set; }
         public RelayCommand ReportFavCommand { get; set; }
         public RelayCommand UnselectCommand { get; set; }
+        public RelayCommand FindCommand {  get; set; }
 
         #endregion
 
@@ -229,6 +241,12 @@ namespace RecuperacionBiblioteca.ViewModel
                 _ => CheckLista()
             );
 
+            FindCommand = new RelayCommand(
+                _ => FindLibro(),
+                _ => true
+
+            );
+
             UnselectCommand = new RelayCommand(
                 _ => Unselect(),
                 _ => true
@@ -279,6 +297,17 @@ namespace RecuperacionBiblioteca.ViewModel
             } else
             {
                 MessageBox.Show("No hay ningún libro agregado a favoritos.", "Error", MessageBoxButton.OK);
+            }
+        }
+
+        public void FindLibro()
+        {
+            if (TextBox != null)
+            {
+                Libros = _bibliotecaService.GetAllLibros(TextBox);
+            } else
+            {
+                MessageBox.Show("El campo del buscador está vacío.", "Error", MessageBoxButton.OK);
             }
         }
 
