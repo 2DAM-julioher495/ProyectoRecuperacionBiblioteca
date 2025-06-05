@@ -21,7 +21,7 @@
             <TextBox Margin="5, 5, 5,  0" Text="{Binding TextBox}"/>
             <TextBlock Margin="5, 0, 5, 5">Buscar por Título, Autor o género.</TextBlock>
             <Button Content="Buscar" Command="{Binding FindCommand}" Margin="5"/>
-            <Button Content="Cancelar Selección" Command="{Binding UnselectCommand}" Margin="5"/>
+            <Button Content="Cancelar" Command="{Binding UnselectCommand}" Margin="5"/>
         </StackPanel>
 
         <!-- DataGrid -->
